@@ -1,9 +1,21 @@
 all:
-  Webservers:
-    web01: 
+  hosts:
+    web01:
       ansible_host: 44.203.100.221
     web02:
       ansible_host: 3.92.189.175
-  Dbservers:  
-    db01: 
+    db01:
       ansible_host: 54.174.174.108
+    
+  children:
+    Webservers:
+      hosts:
+        web01:
+        web02:
+    Dbservers:
+      hosts:
+        db01:
+    Dcorigin:
+      children:
+        Webservers:
+        Dbservers:
