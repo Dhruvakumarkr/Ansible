@@ -1,0 +1,39 @@
+---
+- name: Launch and configure a MySQL-DB server
+  hosts: Dbservers
+  become: yes
+  tasks:
+    - name: Update APT package index
+      apt:
+        update_cache: yes
+
+    - name: Install MySQL Server
+      apt:
+        name: mysql-server
+        state: present
+
+    - name: Install Pymysql
+      apt:
+        name: python3-pymysql
+        state: present
+          
+    - name: Ensure MySQL Server is started and enabled
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Create a new database with name 'accounts'
+      mysql_db:
+        name: accounts
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Create database user name and password with all database privileges
+      mysql_user:
+        name: Dhruva
+        password: 'Dhruvad@17'
+        priv: '*.*:ALL'
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+

@@ -1,0 +1,9 @@
+- ec2:
+    key_name: mykeydk
+    instance_type: t2.micro
+    image: ami-04a81a99f5ec58529
+    wait: yes
+    group: control-cg
+    count: 1
+    vpc_subnet_id: subnet-009e10b60671a0380
+    assign_public_ip: yes
