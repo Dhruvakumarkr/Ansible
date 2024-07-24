@@ -1,0 +1,3 @@
+dbname: DynamoDB
+dbuser: AWS
+dbpass: AWS-DynamoDB

@@ -1,0 +1,54 @@
+---
+- name: Launch and configure a MySQL-DB server
+  hosts: Dbservers
+  become: yes
+    #vars:
+    #dbname: electric
+    #dbuser: Dhruva
+    #dbpass: Dhruvad@17
+  tasks:
+    - debug:
+        msg: "The Db Name is {{ dbname }}"
+    
+    - debug:
+        msg: "The user is {{ dbuser }}"
+
+    - name: Update APT package index
+      apt:
+        update_cache: yes
+
+    - name: Install MySQL Server
+      apt:
+        name: mysql-server
+        state: present
+
+    - name: Install Pymysql
+      apt:
+        name: python3-pymysql
+        state: present
+          
+    - name: Ensure MySQL Server is started and enabled
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Create a new database with name "{{ dbname }}"
+      mysql_db:
+        name: "{{ dbname }}"
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Create database user name and password with all database privileges
+      mysql_user:
+        name: "{{ dbuser }}"
+        password: "{{ dbpass }}"
+        priv: '*.*:ALL'
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+      register: dbout
+
+    - name: Printing output of dbout
+      debug:
+        var: dbout
+
